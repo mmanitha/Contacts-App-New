@@ -24,24 +24,12 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     var value = ""
 
-//    func decodeEnum() {
-//        if let x = recievedContact?.pet {
-//            switch x {
-//            case .Cat:
-//                value = "Cat"
-//            case .Dog:
-//                value = "Dog"
-//            case .Other:
-//                value = "Other"
-//            }
-//        }
-//    }
     
     
     
     func convertDateToNSDate(x : String) -> NSDate? {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy"
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         
         if let y = dateFormatter.dateFromString(x) {
         
@@ -55,8 +43,10 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
     func convertDateToString(x : NSDate) -> String? {
         
         let dateFormatter = NSDateFormatter()
-        
-        dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+
+        //dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
         
         let convertedDate = dateFormatter.stringFromDate(x)
         
@@ -72,12 +62,7 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
         
         super.viewDidLoad()
         
-        //self.petPicker.dataSource = self
-        //self.petPicker.delegate = self
-        
-        pickerData = ["cat", "dog", "other"]
-        
-//        saveStatus.text = ""
+//      saveStatus.text = ""
         
         //all of this sets the text fields
         firstNameField.text = recievedContact?.firstName

@@ -17,20 +17,10 @@ class DataManager {
     static let sharedManager = DataManager()
     
     
-//    func convertDate(x : String) -> NSDate {
-//        let dateFormatter = NSDateFormatter()
-//        dateFormatter.dateFormat = "MMMM dd, yyyy"
-//        
-//        let y = dateFormatter.dateFromString(x)
-//        
-//        
-//        return y!
-//    }
-    
-    
 
     init() {
         self.contactList = [Contact]()
+        
         //self.contactList = loadContacts()
         
         //
@@ -61,26 +51,54 @@ class DataManager {
     //updates contactList
     func updateContact(updatedContact : Contact) -> Bool {
         
-        for c in self.contactList {
+        
+        let filteredList = self.contactList.filter{$0.contactID == updatedContact.contactID}
+    
+
+        if filteredList.count > 0 {
             
-            if c.contactID == updatedContact.contactID {
-                c.firstName = updatedContact.firstName
-                c.lastName = updatedContact.lastName
-                c.emailAddress = updatedContact.emailAddress
-                c.phoneNumber = updatedContact.phoneNumber
-                c.gender = updatedContact.gender
-                c.birthday = updatedContact.birthday
+            let c = filteredList[0]
                 
-                self.saveContacts()
-                
-                publishMessage(true)
-                
-                return true
-            }
+            c.firstName = updatedContact.firstName
+            c.lastName = updatedContact.lastName
+            c.emailAddress = updatedContact.emailAddress
+            c.phoneNumber = updatedContact.phoneNumber
+            c.gender = updatedContact.gender
+            c.birthday = updatedContact.birthday
+            
+            self.saveContacts()
+            
+            publishMessage(true)
+            
+            return true
+            
         }
         
         return false
     }
+
+    
+        
+//        for c in self.contactList {
+//            
+//            if c.contactID == updatedContact.contactID {
+//                c.firstName = updatedContact.firstName
+//                c.lastName = updatedContact.lastName
+//                c.emailAddress = updatedContact.emailAddress
+//                c.phoneNumber = updatedContact.phoneNumber
+//                c.gender = updatedContact.gender
+//                c.birthday = updatedContact.birthday
+//                
+//                self.saveContacts()
+//                
+//                publishMessage(true)
+//                
+//                return true
+//            }
+//        }
+//        
+//        return false
+//    }
     
     
     
