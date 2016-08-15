@@ -21,6 +21,7 @@ class DataManager {
     init() {
         self.contactList = [Contact]()
         
+        fetchContacts()
         //self.contactList = loadContacts()
         
         //
@@ -207,6 +208,115 @@ class DataManager {
         let destinationPath = "\(documentsPath)/SavedContacts"
         
         return destinationPath
+    }
+    
+    
+    
+    
+    
+    
+    
+    //function to parse contacts
+    
+    
+    
+    private func parseContact(jsonDict : [String:AnyObject]) -> Contact {
+        
+        let newContact = Contact()
+        
+        
+        //Name
+        if let fullName = jsonDict["name"] as? String {
+            
+            let names = parseName(fullName)
+            
+            newContact.firstName = names?.first
+            newContact.lastName = names?.last
+            
+        }
+        
+        //phoneNumber
+        newContact.phoneNumber = jsonDict["phone"] as? String
+        
+        //emailAddress
+        newContact.emailAddress = jsonDict["email"] as? String
+        
+        //contactID
+        if let contactId = jsonDict["id"] as? NSNumber {
+            
+            newContact.contactID = String(contactId)
+        }
+        
+
+        
+        return newContact
+    }
+    
+    
+    //parsing the fullname to first and last names
+    
+    func parseName(fullName : String) -> (first: String , last: String)? {
+        
+        let names = fullName.componentsSeparatedByString(" ")
+        
+        if names.count > 1 {
+            
+            return (first:names[0], last:names[1])
+        }
+        
+        return nil
+    }
+
+    
+    
+    
+    //function to fetch contacts
+    
+    func fetchContacts() {
+        
+        let url = NSURL(string: "http://jsonplaceholder.typicode.com/users")
+        let request = NSURLRequest(URL: url!)
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) {data, response, err in
+            
+            if err != nil {
+                print("Got an error: \(err)")
+            }
+            else {
+                var contactList = [Contact]()
+                
+                do {
+                    
+                    if let results : [[String : AnyObject]] = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as? [[String : AnyObject]] {
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            for jsonDict in results {
+                                
+                                let newContact = self.parseContact(jsonDict)
+                                
+                                contactList.append(newContact)
+                                
+                                print(contactList)
+                                
+                                self.saveContacts()
+                                
+                                self.publishMessageAdd(true)
+                            }
+                            
+                        })
+                    }
+                    
+                    
+                }
+                catch {
+                    print("Failed to fetch: \(error)")
+                }
+            }
+        }
+        
+        task.resume()
+        
     }
     
     

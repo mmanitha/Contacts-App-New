@@ -8,19 +8,19 @@
 
 import UIKit
 
-class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ContactDetailViewController: UIViewController {
 
     @IBOutlet weak var firstNameField: UITextField!
     @IBOutlet weak var lastNameField: UITextField!
     @IBOutlet weak var phoneNumberField: UITextField!
     @IBOutlet weak var emailAddressField: UITextField!
-    @IBOutlet weak var genderSwitch: UISwitch!
     @IBOutlet weak var birthdayField: UITextField!
+    @IBOutlet weak var genderSegment: UISegmentedControl!
     
     
     var recievedContact : Contact?
     
-    var pickerData: [String] = [String]()
+    //var pickerData: [String] = [String]()
     
     var value = ""
 
@@ -70,13 +70,13 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
         emailAddressField.text = recievedContact?.emailAddress
         phoneNumberField.text = recievedContact?.phoneNumber
         
-        if let rc = recievedContact?.gender {
-            if rc == .Male {
-                genderSwitch.setOn(true, animated: false)
-            } else {
-                genderSwitch.setOn(false, animated: false)
-            }
-        }
+//        if let rc = recievedContact?.gender {
+//            if rc == .Male {
+//                genderSwitch.setOn(true, animated: false)
+//            } else {
+//                genderSwitch.setOn(false, animated: false)
+//            }
+//        }
         
         let recievedDate = recievedContact?.birthday
         var convertedDate : String?
@@ -89,6 +89,16 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
         if let cd = convertedDate {
         
             birthdayField.text = cd
+        }
+        
+        
+        if let rc2 = recievedContact?.gender {
+        
+            if rc2 == .Male {
+                genderSegment.selectedSegmentIndex = 0
+            } else {
+                genderSegment.selectedSegmentIndex = 1
+            }
         }
         
         
@@ -107,23 +117,23 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
-    }
-    
-    //capturing picker data
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        // This method is triggered whenever the user makes a change to the picker selection.
-        // The parameter named row and component represents what was selected.
-    }
+//    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+//        return 1
+//    }
+//    
+//    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+//        return pickerData.count
+//    }
+//    
+//    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+//        return pickerData[row]
+//    }
+//    
+//    //capturing picker data
+//    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        // This method is triggered whenever the user makes a change to the picker selection.
+//        // The parameter named row and component represents what was selected.
+//    }
     
     
     
@@ -161,14 +171,22 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
             newInfo.emailAddress = emailAddressField.text!
             newInfo.phoneNumber = phoneNumberField.text!
             
-            
-            if genderSwitch.on {
+            if genderSegment.selectedSegmentIndex == 0 {
                 newInfo.gender = .Male
                 print("changed to male")
             } else {
                 newInfo.gender = .Female
                 print("changed to female")
             }
+            
+            
+//            if genderSwitch.on {
+//                newInfo.gender = .Male
+//                print("changed to male")
+//            } else {
+//                newInfo.gender = .Female
+//                print("changed to female")
+//            }
             
             
             if let birthdayInTextField = birthdayField.text {
@@ -203,13 +221,21 @@ class ContactDetailViewController: UIViewController, UIPickerViewDelegate, UIPic
         newContact.emailAddress = emailAddressField.text!
         newContact.phoneNumber = phoneNumberField.text!
         
-        if genderSwitch.on {
+        if genderSegment.selectedSegmentIndex == 0 {
             newContact.gender = .Male
-            print("added as male")
+            print("changed to male")
         } else {
             newContact.gender = .Female
-            print("added as female")
+            print("changed to female")
         }
+        
+//        if genderSwitch.on {
+//            newContact.gender = .Male
+//            print("added as male")
+//        } else {
+//            newContact.gender = .Female
+//            print("added as female")
+//        }
         
         if let birthdayInTextField = birthdayField.text {
             
