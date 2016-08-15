@@ -16,14 +16,38 @@ class DataManager {
     
     static let sharedManager = DataManager()
     
-    var aj = Contact(firstName: "Aj", lastName: "Coley", phoneNumber: "470-939-3942", emailAddress: "acoley@gmail.com")
-    var brandon = Contact(firstName: "Brandon", lastName: "Green", phoneNumber: "493-299-9234", emailAddress: "bgeen@gmail.com")
-    var caleda = Contact(firstName: "Caleda", lastName: "Champagne", phoneNumber: "293-492-4322", emailAddress: "cchampagne@gmail.com")
-    var rj = Contact(firstName: "Rj", lastName: "Coley", phoneNumber: "470-939-3942", emailAddress: "acoley@gmail.com")
+    
+//    func convertDate(x : String) -> NSDate {
+//        let dateFormatter = NSDateFormatter()
+//        dateFormatter.dateFormat = "MMMM dd, yyyy"
+//        
+//        let y = dateFormatter.dateFromString(x)
+//        
+//        
+//        return y!
+//    }
+    
+    
 
     init() {
         self.contactList = [Contact]()
         //self.contactList = loadContacts()
+        
+        //
+        //        let ajbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
+        //        var aj = Contact(firstName: "Aj", lastName: "Coley", phoneNumber: "470-939-3942", emailAddress: "acoley@gmail.com", pet: .Cat, birthday: ajbday)
+        //
+        //        var bbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
+        //        var brandon = Contact(firstName: "Brandon", lastName: "Green", phoneNumber: "493-299-9234", emailAddress: "bgeen@gmail.com", pet: .Cat, birthday: bbday)
+        //
+        //        var cbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
+        //        var caleda = Contact(firstName: "Caleda", lastName: "Champagne", phoneNumber: "293-492-4322", emailAddress: "cchampagne@gmail.com", pet: .Dog, birthday: cbday)
+        //
+        //        var rjbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
+        //        var rj = Contact(firstName: "Rj", lastName: "Coley", phoneNumber: "470-939-3942", emailAddress: "acoley@gmail.com", pet: .Other, birthday: rjbday)
+        //        
+        //
+        
     }
     
     //returns the contactList array
@@ -44,6 +68,8 @@ class DataManager {
                 c.lastName = updatedContact.lastName
                 c.emailAddress = updatedContact.emailAddress
                 c.phoneNumber = updatedContact.phoneNumber
+                c.gender = updatedContact.gender
+                c.birthday = updatedContact.birthday
                 
                 self.saveContacts()
                 
@@ -139,7 +165,7 @@ class DataManager {
         
         if self.contactList.isEmpty {
         
-            self.contactList += [aj, brandon, caleda, rj]
+        //    self.contactList += [aj, brandon, caleda, rj]
         }
         
         let destinationPath = self.filePathForArchiving()

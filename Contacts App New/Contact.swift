@@ -10,18 +10,38 @@ import Foundation
 
 class Contact : NSObject, NSCoding {
     
+    enum Gender : Int {
+        case Male = 1
+        case Female = 2
+    }
+   
+    func convertDate(x : String) -> NSDate {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        
+        let y = dateFormatter.dateFromString(x)
+        
+        
+        return y!
+    }
+
     var firstName : String?
     var lastName : String?
     var phoneNumber : String?
     var emailAddress : String?
     var contactID : String = NSUUID().UUIDString
+    var gender : Gender = .Male
+    var birthday : NSDate?
     
-    init(firstName: String, lastName: String, phoneNumber: String, emailAddress: String) {
+    init(firstName: String, lastName: String, phoneNumber: String, emailAddress: String, gender: Gender, birthday: NSDate?) {
         
         self.firstName = firstName
         self.lastName = lastName
         self.phoneNumber = phoneNumber
         self.emailAddress = emailAddress
+        self.gender = gender
+        self.birthday = birthday
+        
     }
     
     
@@ -38,6 +58,13 @@ class Contact : NSObject, NSCoding {
         self.phoneNumber = aDecoder.decodeObjectForKey("PHONENUMBER") as? String
         self.emailAddress = aDecoder.decodeObjectForKey("EMAILADDRESS") as? String
         self.contactID = (aDecoder.decodeObjectForKey("CONTACTID") as? String)!
+        
+        if let genderValue = aDecoder.decodeObjectForKey("GENDER") as? Int {
+            
+            self.gender = Gender(rawValue: genderValue)!
+        }
+        
+        self.birthday = aDecoder.decodeObjectForKey("BIRTHDAY") as? NSDate
         
     }
     
@@ -60,6 +87,14 @@ class Contact : NSObject, NSCoding {
         }
         
         aCoder.encodeObject(self.contactID, forKey: "CONTACTID")
+        
+        
+        aCoder.encodeObject(gender.rawValue, forKey: "GENDER")
+        
+        if let bd = self.birthday {
+            
+            aCoder.encodeObject(bd, forKey: "BIRTHDAY")
+        }
         
     }
     
