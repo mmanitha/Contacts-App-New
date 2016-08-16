@@ -19,32 +19,22 @@ class DataManager {
     
 
     init() {
+        
         self.contactList = [Contact]()
         
-        fetchContacts()
-        //self.contactList = loadContacts()
+        self.contactList = self.loadContacts()
         
-        //
-        //        let ajbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
-        //        var aj = Contact(firstName: "Aj", lastName: "Coley", phoneNumber: "470-939-3942", emailAddress: "acoley@gmail.com", pet: .Cat, birthday: ajbday)
-        //
-        //        var bbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
-        //        var brandon = Contact(firstName: "Brandon", lastName: "Green", phoneNumber: "493-299-9234", emailAddress: "bgeen@gmail.com", pet: .Cat, birthday: bbday)
-        //
-        //        var cbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
-        //        var caleda = Contact(firstName: "Caleda", lastName: "Champagne", phoneNumber: "293-492-4322", emailAddress: "cchampagne@gmail.com", pet: .Dog, birthday: cbday)
-        //
-        //        var rjbday = DataManager.sharedManager.convertDate("Aug 10, 2016")
-        //        var rj = Contact(firstName: "Rj", lastName: "Coley", phoneNumber: "470-939-3942", emailAddress: "acoley@gmail.com", pet: .Other, birthday: rjbday)
-        //        
-        //
+        if self.contactList.count == 0 {
+            
+            self.fetchContacts()
+        }
+        
+//        self.fetchContacts()
         
     }
     
     //returns the contactList array
     func getContacts() -> [Contact] {
-        
-        self.contactList = loadContacts()
         
         return self.contactList
     }
@@ -155,7 +145,7 @@ class DataManager {
         
     }
     
-    func publishMessageAdd(message:Bool) {
+    func publishMessageAdd(message : Bool) {
         
         NSNotificationCenter.defaultCenter().postNotificationName("CONTACT_ADDED", object: self, userInfo: ["message" : message])
         
@@ -182,10 +172,6 @@ class DataManager {
     
     private func loadContacts() -> [Contact] {
         
-        if self.contactList.isEmpty {
-        
-        //    self.contactList += [aj, brandon, caleda, rj]
-        }
         
         let destinationPath = self.filePathForArchiving()
         
@@ -217,7 +203,6 @@ class DataManager {
     
     
     //function to parse contacts
-    
     
     
     private func parseContact(jsonDict : [String:AnyObject]) -> Contact {
@@ -272,7 +257,7 @@ class DataManager {
     
     //function to fetch contacts
     
-    func fetchContacts() {
+    private func fetchContacts() {
         
         let url = NSURL(string: "http://jsonplaceholder.typicode.com/users")
         let request = NSURLRequest(URL: url!)
@@ -284,27 +269,30 @@ class DataManager {
                 print("Got an error: \(err)")
             }
             else {
-                var contactList = [Contact]()
                 
                 do {
                     
                     if let results : [[String : AnyObject]] = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as? [[String : AnyObject]] {
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
                             for jsonDict in results {
                                 
                                 let newContact = self.parseContact(jsonDict)
                                 
-                                contactList.append(newContact)
+                                self.contactList.append(newContact)
                                 
-                                print(contactList)
+                               // print("CONTACT LIST: \(contactList)")
                                 
-                                self.saveContacts()
+                                //self.saveContacts()
                                 
-                                self.publishMessageAdd(true)
                             }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.publishMessageAdd(true)
                             
                         })
+                        
                     }
                     
                     

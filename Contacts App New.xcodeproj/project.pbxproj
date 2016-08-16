@@ -300,6 +300,7 @@
 				A45B1E5B1D51B74F00AEBF29 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

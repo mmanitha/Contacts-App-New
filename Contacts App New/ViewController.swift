@@ -12,7 +12,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tabeView: UITableView!
     
-    var contactList : [Contact]?
+    var contactList : [Contact]? = [Contact]()
     
     var sendContact : Int?
     
@@ -24,9 +24,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tabeView.dataSource = self
         self.tabeView.delegate = self
         
-        
-        self.contactList = DataManager.sharedManager.getContacts()
-        
+        self.contactList =  DataManager.sharedManager.getContacts()
+
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(contactChangedFunction), name: "CONTACT_CHANGED", object: nil)
         
@@ -53,8 +52,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if let userInfo = msg.userInfo as? [String : Bool] {
             if userInfo["message"] == true {
-                
+               
+            
                 self.contactList = DataManager.sharedManager.getContacts()
+
                 self.tabeView.reloadData()
             }
         }
